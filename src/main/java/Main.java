@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -11,24 +14,62 @@ public class Main {
 
 class BillCalculator {
 
+    // Запрос и проверка корректности количества человек
     public static int amountRequest() {
         Scanner scanner = new Scanner(System.in);
-        int personsRequest = 0;
+        int personsAmount = 0;
 
-        while (personsRequest <= 1) {
+        while (personsAmount <= 1) {
             System.out.println("Уточните, пожалуйста, на сколько персон необходимо разделить счет?\nКоличество: ");
-            personsRequest = scanner.nextInt();
-            if (personsRequest == 1) {
+            personsAmount = scanner.nextInt();
+            if (personsAmount == 1) {
                 System.out.println("Тогда нет смысла делить счет :)");
-            } else if (personsRequest <= 0) {
+            } else if (personsAmount <= 0) {
                 System.out.println("Введено некорректное значение. Попробуйте снова.");
             }
         }
-        return personsRequest;
+        return personsAmount;
     }
 
 
-    public static  addProducts() {
+    // Калькулятор товаров
+    public static HashMap<ArrayList<String>, Float> Calculator() {
 
+        Scanner scanner = new Scanner(System.in);
+
+        HashMap<ArrayList<String>, Float> productHashMap = new HashMap<>();
+
+        String command = "";
+        ArrayList<String> productList = new ArrayList<>();
+        float totalCost = 0.0f;
+        float productCost = 0.0f;
+
+        while (!command.equals("завершить")) {
+            System.out.println("Введите название товара: ");
+            String productName = scanner.next();
+
+            //Запрос и проверка ввода стоимости
+            while (true) {
+                try {
+                    System.out.println("Введите стоимость товара: ");
+                    productCost = scanner.nextFloat();
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Некорректное значение стоимости. Стоимость должна быть числом в формате xx.xx");
+                }
+            }
+
+            productList.add(productName);
+            totalCost = totalCost + productCost;
+            System.out.println("Товар '" + productName + "'стоимостью" + productCost + "руб. успешно добавлен.");
+
+            System.out.println("Хотите добавить еще товар?\nЕсли хотите завершить добавление товаров, введите команду 'Завершить'");
+            command = scanner.next().toLowerCase();
+            if (command.equals("завершить")) {
+                productHashMap.put(productList, totalCost);
+                break;
+            }
+        }
+        return productHashMap;
     }
 }
