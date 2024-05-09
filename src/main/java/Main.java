@@ -8,6 +8,7 @@ public class Main {
 
         int persons = BillCalculator.amountRequest();
         HashMap<ArrayList<String>, Float> finalProductMap = BillCalculator.Calculator();
+
     }
 }
 
