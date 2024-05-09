@@ -7,12 +7,13 @@ public class Main {
     public static void main(String[] args) {
 
         int persons = BillCalculator.amountRequest();
-
+        HashMap<ArrayList<String>, Float> finalProductMap = BillCalculator.Calculator();
 
     }
 }
 
 class BillCalculator {
+
 
     // Запрос и проверка корректности количества человек
     public static int amountRequest() {
@@ -32,11 +33,33 @@ class BillCalculator {
     }
 
 
+    // Метод getCost для try-catch
+    public static float getCost() {
+        Scanner scanner = new Scanner(System.in);
+        float getCost = scanner.nextFloat();
+        return getCost;
+    }
+
+
+    //Обработка окончаний для вывода
+    public static String properTextEnd(float inCost) {
+        String textEnd = "";
+        int temp = (int)inCost % 10;
+        if (temp == 1) {
+            textEnd = "ь";
+        } else if (temp > 1 & temp < 5) {
+            textEnd = "я";
+        } else {
+            textEnd = "ей";
+        }
+        return textEnd;
+    }
+
+
     // Калькулятор товаров
     public static HashMap<ArrayList<String>, Float> Calculator() {
 
         Scanner scanner = new Scanner(System.in);
-
         HashMap<ArrayList<String>, Float> productHashMap = new HashMap<>();
 
         String command = "";
@@ -50,26 +73,23 @@ class BillCalculator {
 
             //Запрос и проверка ввода стоимости
             while (true) {
+                System.out.println("Введите стоимость товара: ");
                 try {
-                    System.out.println("Введите стоимость товара: ");
-                    productCost = scanner.nextFloat();
+                    productCost = getCost();
                     break;
                 } catch (InputMismatchException e) {
-                    System.out.println("Некорректное значение стоимости. Стоимость должна быть числом в формате xx.xx");
+                    System.out.println("Некорректное значение стоимости");
                 }
             }
 
             productList.add(productName);
             totalCost = totalCost + productCost;
-            System.out.println("Товар '" + productName + "'стоимостью" + productCost + "руб. успешно добавлен.");
+            System.out.printf("Товар '%s' стоимостью %.2f рубл%s успешно добавлен.\n", productName, productCost, properTextEnd(productCost));
 
-            System.out.println("Хотите добавить еще товар?\nЕсли хотите завершить добавление товаров, введите команду 'Завершить'");
+            System.out.println("Хотите добавить еще товар? (Для завершения ввода введите команду 'Завершить')");
             command = scanner.next().toLowerCase();
-            if (command.equals("завершить")) {
-                productHashMap.put(productList, totalCost);
-                break;
-            }
         }
+        productHashMap.put(productList, totalCost);
         return productHashMap;
     }
 }
